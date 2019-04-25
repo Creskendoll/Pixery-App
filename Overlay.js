@@ -29,7 +29,6 @@ export default class Overlay extends React.Component {
 
     _getFaceOverlays() {
         let graphics = this.props.shapes.map((face, index) => {
-            
             let dots = this._getDots(face);
             return (
             <Svg key={"svg"+index} height={face.bounds.size.height*2} width={face.bounds.size.width*2}>
@@ -44,7 +43,7 @@ export default class Overlay extends React.Component {
     }
 
     _getDots(face) {
-        return this.landmarkNames.map((landmark, index) => {
+        let res = this.landmarkNames.map((landmark, index) => {
             if(landmark in face) {
                return(
                 <Circle key={"circle"+index} cx={face[landmark].x} 
@@ -52,6 +51,7 @@ export default class Overlay extends React.Component {
                );
             }
         });
+        return res;
     }
 
     render() {
