@@ -28,19 +28,17 @@ export default class Overlay extends React.Component {
     }
 
     _getFaceOverlays() {
-        let graphics = this.props.shapes.map((face, index) => {
+        return this.props.shapes.map((face, index) => {
             let dots = this._getDots(face);
             return (
-            <Svg key={"svg"+index} style={{pointerEvents:"none"}}
-                height={face.bounds.size.height*2} width={face.bounds.size.width*2}>
-                <Rect x={face.bounds.origin.x} y={face.bounds.origin.y} 
-                    width={face.bounds.size.width} height={face.bounds.size.height}
-                    fill="none" stroke="green" strokeWidth={2} />
-                {dots}
-            </Svg>);
+                <Svg key={"svg"+index} style={{pointerEvents:"none"}}
+                    height={face.bounds.size.height*2} width={face.bounds.size.width*2}>
+                    <Rect x={face.bounds.origin.x} y={face.bounds.origin.y} 
+                        width={face.bounds.size.width} height={face.bounds.size.height}
+                        fill="none" stroke="green" strokeWidth={2} />
+                    {dots}
+                </Svg>);
         });
-
-        return (graphics);
     }
 
     _getDots(face) {

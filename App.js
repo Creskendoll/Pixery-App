@@ -34,9 +34,9 @@ export default class App extends React.Component {
 
   componentDidMount(){
     this.motionListener = DangerZone.DeviceMotion.addListener(this.onDeviceMotion);
-    setTimeout(()=>{ //MH - tempm - wait 5 seconds for now before detecting motion
-      this.detectMotion(true);
-    },2000);
+    this.detectMotion(true);
+    // setTimeout(()=>{ //MH - tempm - wait 5 seconds for now before detecting motion
+    // },2000);
   }
 
   componentWillUpdate(nextProps, nextState) {
@@ -108,16 +108,20 @@ export default class App extends React.Component {
       pictureTaken: true
     });
     if (this.camera) {
-      this.camera.takePictureAsync({ base64: true, onPictureSaved: this.onPictureSaved });
+      this.setState({
+        pictureTaken : false,
+        visibleGlasses : [0,1,2,3,4]
+      });
+      // this.camera.takePictureAsync({ base64: true, onPictureSaved: this.onPictureSaved });
     }
   }
 
   onPictureSaved = (img)=>{    
-    postImage(img);
+    // postImage(img);
 
     this.setState({
       pictureTaken : false,
-      visibleGlasses : [0,1,2,3]
+      visibleGlasses : [0,1,2,3,4]
     });
     this.detectFaces(true);
   }
