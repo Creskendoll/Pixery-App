@@ -31,7 +31,8 @@ export default class Overlay extends React.Component {
         let graphics = this.props.shapes.map((face, index) => {
             let dots = this._getDots(face);
             return (
-            <Svg key={"svg"+index} height={face.bounds.size.height*2} width={face.bounds.size.width*2}>
+            <Svg key={"svg"+index} style={{pointerEvents:"none"}}
+                height={face.bounds.size.height*2} width={face.bounds.size.width*2}>
                 <Rect x={face.bounds.origin.x} y={face.bounds.origin.y} 
                     width={face.bounds.size.width} height={face.bounds.size.height}
                     fill="none" stroke="green" strokeWidth={2} />
@@ -57,8 +58,8 @@ export default class Overlay extends React.Component {
     render() {
         let faces = this._getFaceOverlays();
         return(
-        <View style={{flex:1, position:"absolute",
-            backgroundColor: 'transparent'}}>
+        <View style={{flex:1, zIndex : 2, position:"absolute",
+            backgroundColor: 'transparent', pointerEvents:"none"}}>
             {faces.map(f=>f)}
         </View>
         );

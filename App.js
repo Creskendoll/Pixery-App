@@ -2,8 +2,12 @@ import React from 'react';
 import { StyleSheet, Text, View, TouchableNativeFeedback, Image } from 'react-native';
 import { Camera, Permissions, FaceDetector, DangerZone } from 'expo';
 import Overlay from "./Overlay";
+import postImage from "./Client";
+import MyCarousel from "./MyCarousel";
+import OkButton from './OkButton';
+import CancelButton from './CancelButton';
 
-export default class CameraExample extends React.Component {
+export default class App extends React.Component {
   static defaultProps = {
     motionInterval: 500, //ms between each device motion reading
     motionTolerance: 1, //allowed variance in acceleration
@@ -18,6 +22,8 @@ export default class CameraExample extends React.Component {
     pictureTaken: false, //true when photo has been taken
     motion: null, //captures the device motion object 
     detectMotion: false, //when true we attempt to determine if device is still
+    visibleGlasses : [],
+    isButtonsVisible : false
   };
   landmarkThreshold = 4;
 
@@ -84,28 +90,51 @@ export default class CameraExample extends React.Component {
       this.setState({
         faceDetected: true,
         faceShapes : faces,
-        faceValid : true
+        faceValid : true,
+        isButtonsVisible : true
       });
 
     } else {
       this.setState({
         faceDetected: false,
         faceShapes : [],
-        faceValid : false
+        faceValid : false,
+        isButtonsVisible : false
       });
     }
   }
   takePicture = ()=>{
     this.setState({
-      pictureTaken: true,
+      pictureTaken: true
     });
     if (this.camera) {
-      console.log('take picture');
-      this.camera.takePictureAsync({ onPictureSaved: this.onPictureSaved });
+      this.camera.takePictureAsync({ base64: true, onPictureSaved: this.onPictureSaved });
     }
   }
-  onPictureSaved = ()=>{
+
+  onPictureSaved = (img)=>{    
+    postImage(img);
+
+    this.setState({
+      pictureTaken : false,
+      visibleGlasses : [0,1,2,3]
+    });
     this.detectFaces(true);
+  }
+
+  onOkPress = () => {
+    
+    console.log("ok");
+    this.setState({
+
+    });
+  }
+  onCancelPress = () => {
+    console.log("cancel");
+    
+    this.setState({
+      visibleGlasses : []
+    });
   }
 
   render() {
@@ -117,6 +146,7 @@ export default class CameraExample extends React.Component {
     } else {
       return (
         <View style={styles.container}>
+          
           <Camera
             style={{ flex:1 }}
             type={this.props.cameraType}
@@ -129,9 +159,26 @@ export default class CameraExample extends React.Component {
             }}
             ref={ref => {
               this.camera = ref;
-            }}
-          >
+            }}>
+            
+            <TouchableNativeFeedback
+              style={{zIndex : 1}}
+              disabled={!this.state.faceValid}
+              onPress={this.takePicture}>
+              <View style={this.state.faceValid ? styles.button : styles.buttonDisabled}>
+                <Text style={this.state.faceValid ? styles.buttonText : styles.buttonTextDisabled}
+                  disabled={this.state.faceValid}>
+                  SUGGEST GLASSES
+                </Text>
+              </View>
+            </TouchableNativeFeedback>
+
             <Overlay shapes={this.state.faceShapes} />
+
+            <MyCarousel items={this.state.visibleGlasses} faces={this.state.faceShapes}/>
+
+            <CancelButton handlePress={this.onCancelPress} isEnabled={this.state.isButtonsVisible}/>
+            <OkButton handlePress={this.onOkPress} isEnabled={this.state.isButtonsVisible}/>
 
             <Image
               source={require("./assets/face_t.png")}
@@ -151,18 +198,6 @@ export default class CameraExample extends React.Component {
                   {this.state.faceDetected ? 'Hi :)' : 'No Face Detected'}
                 </Text>
             </View>
-            
-            <TouchableNativeFeedback
-              disabled={this.state.faceValid}
-              onPress={this.takePicture}>
-              <View style={this.state.faceValid ? styles.button : styles.buttonDisabled}>
-                <Text style={this.state.faceValid ? styles.buttonText : styles.buttonTextDisabled}
-                  disabled={this.state.faceValid}>
-                  SUGGEST GLASSES
-                </Text>
-              </View>
-            </TouchableNativeFeedback>
-
           </Camera>
         </View>
       );
@@ -173,7 +208,8 @@ export default class CameraExample extends React.Component {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1
+    flex: 1,
+    zIndex : 0
   },
   textStandard: {
     fontSize: 18, 
@@ -195,7 +231,8 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems : "center",
     alignSelf : "center",
-    borderRadius : 50
+    borderRadius : 50,
+    zIndex : 1
   },
   buttonText: {
     textAlign: 'center',
@@ -213,7 +250,8 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems : "center",
     alignSelf : "center",
-    borderRadius : 50
+    borderRadius : 50,
+    zIndex : 1
   },
   buttonTextDisabled: {
     color: '#a1a1a1'
@@ -221,6 +259,6 @@ const styles = StyleSheet.create({
   faceImage: { 
     position:"absolute",
     alignSelf : "center",
-    bottom : 200
+    bottom : 300
   }
 });
