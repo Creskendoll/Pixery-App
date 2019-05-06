@@ -12,11 +12,10 @@ export default class OkButton extends React.Component  {
 		return (
 			<TouchableNativeFeedback
 			style={{zIndex : 2}}
-			// disabled={!this.props.isEnabled}
 			onPress={this.props.handlePress}>
 				<View style={this.props.isEnabled ? styles.okButton : styles.disabledOkButton}>
 					<Image
-						source={require("./assets/buttons/ok.png")}
+						source={this.props.isEnabled ? require("./assets/buttons/ok.png") : require("./assets/buttons/ok_disabled.png")}
 						style={styles.okButtonImg}
 					/>
 				</View>

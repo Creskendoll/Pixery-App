@@ -12,11 +12,10 @@ export default class CancelButton extends React.Component  {
 		return (
 			<TouchableNativeFeedback
             style={{zIndex : 2}}
-            // disabled={!this.props.isEnabled}
             onPress={this.props.handlePress}>
 				<View style={this.props.isEnabled ? styles.cancelButton : styles.disabledCancelButton}>
 					<Image
-                        source={require("./assets/buttons/cancel.png")}
+                        source={this.props.isEnabled ? require("./assets/buttons/cancel.png") : require("./assets/buttons/cancel_disabled.png")}
                         style={styles.cancelButtonImg}
 					/>
 				</View>
@@ -24,7 +23,6 @@ export default class CancelButton extends React.Component  {
 		);
 	}
 }
-
 
 const styles = StyleSheet.create({
 	cancelButton : {

@@ -36,7 +36,7 @@ export default class Overlay extends React.Component {
                     <Rect x={face.bounds.origin.x} y={face.bounds.origin.y} 
                         width={face.bounds.size.width} height={face.bounds.size.height}
                         fill="none" stroke="green" strokeWidth={2} />
-                    {dots}
+                    {/* {dots} */}
                 </Svg>);
         });
     }

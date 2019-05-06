@@ -1,0 +1,10 @@
+Kategoriler:
+
+1)Dikdörtgen, 	Metal, 	Dar
+2)Dikdörtgen, 	Metal, 	Geniþ
+3)Dikdörtgen, 	Kemik, 	Dar
+4)Dikdörtgen, 	Kemik, 	Geniþ
+5)Yuvarlak, 	Metal, 	Dar
+6)Yuvarlak, 	Metal, 	Geniþ
+7)Yuvarlak, 	Kemik, 	Geniþ
+8)Yuvarlak, 	Kemik, 	Dar
